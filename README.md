@@ -1,4 +1,4 @@
-# Raiders
+# Deckborn
 
 Minimal two-player browser card battler built for Cloudflare Workers.
 
@@ -39,7 +39,7 @@ npm install
 npm run deploy
 ```
 
-If the repository is connected to Cloudflare Workers Builds, pushes to the production branch can deploy automatically. The Cloudflare Worker project name must match `raiders` from `wrangler.jsonc`.
+If the repository is connected to Cloudflare Workers Builds, pushes to the production branch can deploy automatically. The Cloudflare Worker project name must match `deckborn` from `wrangler.jsonc`.
 
 ## Assets
 

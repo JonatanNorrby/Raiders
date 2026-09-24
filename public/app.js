@@ -3,7 +3,7 @@ const homeButton = document.querySelector("#home-button");
 const decksButton = document.querySelector("#decks-button");
 const toast = document.querySelector("#toast");
 
-const DECK_STORAGE_KEY = "raiders.decks.v1";
+const DECK_STORAGE_KEY = "deckborn.decks.v1";
 
 let catalog = null;
 let decks = [];
@@ -34,7 +34,7 @@ async function boot() {
     ensureStarterDeck();
     renderHome();
   } catch (error) {
-    app.innerHTML = '<div class="panel">Failed to load Raiders.</div>';
+    app.innerHTML = '<div class="panel">Failed to load Deckborn.</div>';
     showToast(error.message);
   }
 }
@@ -79,7 +79,7 @@ function renderHome() {
   editingDeck = null;
   app.innerHTML = `
     <section class="panel menu">
-      <h1>RAIDERS</h1>
+      <h1>DECKBORN</h1>
       <p class="muted">Two-player card battler prototype.</p>
       <div class="stack menu-actions">
         <button class="button primary" id="start-game">Start Game</button>
