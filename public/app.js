@@ -130,7 +130,6 @@ function renderPlay() {
 }
 
 async function createGame() {
-  document.body.classList.remove("main-menu-active");
   try {
     const response = await fetch("/api/games", { method: "POST" });
     const data = await response.json();
