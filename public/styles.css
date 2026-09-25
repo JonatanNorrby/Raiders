@@ -104,6 +104,54 @@ button { cursor: pointer; }
 .stack { display: grid; gap: 10px; }
 .menu-actions { margin-top: 28px; }
 
+.main-menu-buttons {
+  width: min(360px, 88vw);
+  margin-left: auto;
+  margin-right: auto;
+  gap: 12px;
+}
+
+.menu-art-button {
+  position: relative;
+  width: 100%;
+  min-height: 64px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #f4f5f7;
+  font-weight: 800;
+  transition: transform 150ms ease-out, filter 150ms ease-out;
+}
+
+.menu-art-button img {
+  display: none;
+  width: 100%;
+  height: auto;
+  max-height: 92px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.menu-art-button.has-art img {
+  display: block;
+}
+
+.menu-art-button.has-art span {
+  display: none;
+}
+
+.menu-art-button:not(.has-art) {
+  border: 1px solid #343a45;
+  border-radius: 9px;
+  padding: 10px 16px;
+  background: #232832;
+}
+
+.menu-art-button:hover {
+  transform: translateY(-3px) scale(1.02);
+  filter: brightness(1.08);
+}
+
 .button {
   min-height: 44px;
   border: 1px solid #343a45;

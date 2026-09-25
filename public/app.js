@@ -72,17 +72,35 @@ function renderHome() {
   app.innerHTML = `
     <section class="menu">
       <img class="menu-logo" src="/assets/ui/logo.png" alt="Deckborn">
-      <div class="stack menu-actions">
-        <button class="button primary" id="play-game">Play</button>
-        <button class="button" id="build-decks">Build Decks</button>
+      <div class="stack menu-actions main-menu-buttons">
+        <button class="menu-art-button" id="play-game" type="button" aria-label="Play">
+          <img src="/assets/ui/main-menu/buttons/play.png" alt="">
+          <span>Play</span>
+        </button>
+        <button class="menu-art-button" id="build-decks" type="button" aria-label="Build Decks">
+          <img src="/assets/ui/main-menu/buttons/decks.png" alt="">
+          <span>Build Decks</span>
+        </button>
       </div>
     </section>`;
 
+  prepareMenuButtonArt();
   document.querySelector("#play-game").onclick = renderPlay;
   document.querySelector("#build-decks").onclick = () => {
     document.body.classList.remove("main-menu-active");
     renderDeckBuilder();
   };
+}
+
+function prepareMenuButtonArt() {
+  document.querySelectorAll(".menu-art-button img").forEach((image) => {
+    const button = image.closest(".menu-art-button");
+    const update = () => button.classList.toggle("has-art", image.naturalWidth > 0);
+
+    if (image.complete) update();
+    image.addEventListener("load", update, { once: true });
+    image.addEventListener("error", update, { once: true });
+  });
 }
 
 function renderPlay() {
