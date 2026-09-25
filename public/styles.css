@@ -74,8 +74,8 @@ button { cursor: pointer; }
 
 .menu-logo {
   display: block;
-  width: min(900px, 92vw);
-  max-height: 450px;
+  width: min(720px, 73.6vw);
+  max-height: 360px;
   margin: 0 auto 12px;
   object-fit: contain;
 }
