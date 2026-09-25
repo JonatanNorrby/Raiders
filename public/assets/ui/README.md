@@ -3,6 +3,7 @@
 Optional PNGs currently prepared by the frontend:
 
 - battlefield-background.png — background behind the match board.
+- main-menu/background.png — full-screen background used on the main menu and Play screen.
 - logo.png — reserved for a future graphical Deckborn logo.
 - card-back.png — reserved for showing hidden opponent cards later.
 - health.png — icon/art displayed beside the player's Health value in the bottom-left HUD.

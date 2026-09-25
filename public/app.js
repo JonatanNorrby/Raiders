@@ -74,35 +74,41 @@ function leaveSession() {
 
 function renderHome() {
   editingDeck = null;
+  document.body.classList.add("main-menu-active");
   app.innerHTML = `
-    <section class="panel menu">
+    <section class="menu">
       <img class="menu-logo" src="/assets/ui/logo.png" alt="Deckborn">
-      <p class="muted">Two-player card battler prototype.</p>
       <div class="stack menu-actions">
-        <button class="button primary" id="start-game">Start Game</button>
-        <button class="button" id="join-game">Join Game</button>
+        <button class="button primary" id="play-game">Play</button>
         <button class="button" id="build-decks">Build Decks</button>
       </div>
     </section>`;
 
-  document.querySelector("#start-game").onclick = createGame;
-  document.querySelector("#join-game").onclick = renderJoin;
-  document.querySelector("#build-decks").onclick = renderDeckBuilder;
+  document.querySelector("#play-game").onclick = renderPlay;
+  document.querySelector("#build-decks").onclick = () => {
+    document.body.classList.remove("main-menu-active");
+    renderDeckBuilder();
+  };
 }
 
-function renderJoin() {
+function renderPlay() {
+  document.body.classList.add("main-menu-active");
   app.innerHTML = `
-    <section class="panel menu">
-      <h2>Join Game</h2>
-      <p class="muted">Enter the six-character game code.</p>
-      <form id="join-form" class="stack menu-actions">
-        <input class="text-input" id="game-code" maxlength="6" autocomplete="off" placeholder="ABC123" required>
-        <button class="button primary" type="submit">Join Lobby</button>
-        <button class="button" id="join-back" type="button">Back</button>
-      </form>
+    <section class="menu play-menu">
+      <h2>Play</h2>
+      <div class="stack menu-actions">
+        <button class="button primary" id="create-lobby">Create New Lobby</button>
+        <div class="play-divider"><span>or join existing</span></div>
+        <form id="join-form" class="stack">
+          <input class="text-input" id="game-code" maxlength="6" autocomplete="off" placeholder="Game code" required>
+          <button class="button" type="submit">Join Lobby</button>
+        </form>
+        <button class="button" id="play-back" type="button">Back</button>
+      </div>
     </section>`;
 
-  document.querySelector("#join-back").onclick = renderHome;
+  document.querySelector("#create-lobby").onclick = createGame;
+  document.querySelector("#play-back").onclick = renderHome;
   document.querySelector("#join-form").onsubmit = async (event) => {
     event.preventDefault();
     const code = document.querySelector("#game-code").value.trim().toUpperCase();
@@ -115,6 +121,7 @@ function renderJoin() {
       const response = await fetch("/api/games/" + encodeURIComponent(code) + "/join", { method: "POST" });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Could not join game.");
+      document.body.classList.remove("main-menu-active");
       enterLobby(data.code, data.playerId);
     } catch (error) {
       showToast(error.message);
@@ -123,6 +130,7 @@ function renderJoin() {
 }
 
 async function createGame() {
+  document.body.classList.remove("main-menu-active");
   try {
     const response = await fetch("/api/games", { method: "POST" });
     const data = await response.json();
@@ -194,6 +202,7 @@ function send(message) {
 }
 
 function renderLobby() {
+  document.body.classList.remove("main-menu-active");
   const players = room?.players || [];
   const deckOptions = decks.map((deck) => `
     <option value="${escapeHtml(deck.id)}" ${deck.id === selectedLobbyDeckId ? "selected" : ""}>${escapeHtml(deck.name)}</option>`).join("");
@@ -264,6 +273,7 @@ function renderLobby() {
 }
 
 function renderDeckBuilder() {
+  document.body.classList.remove("main-menu-active");
   if (!editingDeck) {
     editingDeck = cloneDeck(decks[0] || { id: crypto.randomUUID(), name: "New Deck", cards: [] });
   }

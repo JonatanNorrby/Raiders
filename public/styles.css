@@ -55,7 +55,27 @@ button { cursor: pointer; }
   box-shadow: 0 18px 60px rgba(0,0,0,.18);
 }
 
-.menu { width: min(440px, 100%); margin: 9vh auto 0; text-align: center; }
+.main-menu-active {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: linear-gradient(rgba(15,17,21,.18), rgba(15,17,21,.18)), url("/assets/ui/main-menu/background.png") center / cover no-repeat, #0f1115;
+}
+
+.main-menu-active .app-shell {
+  min-height: calc(100vh - 132px);
+  min-height: calc(100dvh - 132px);
+}
+
+.menu {
+  width: min(440px, 100%);
+  margin: 9vh auto 0;
+  padding: 0;
+  text-align: center;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
 .menu-logo {
   display: block;
   width: min(300px, 82%);
@@ -63,6 +83,30 @@ button { cursor: pointer; }
   margin: 0 auto 12px;
   object-fit: contain;
 }
+
+.play-menu h2 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.play-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #969eaa;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.play-divider::before,
+.play-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,.16);
+}
+
 .muted { color: #969eaa; }
 .stack { display: grid; gap: 10px; }
 .menu-actions { margin-top: 28px; }
