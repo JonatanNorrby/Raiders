@@ -343,14 +343,15 @@ button { cursor: pointer; }
 
 .item-bar {
   position: absolute;
-  right: 24px;
-  bottom: 24px;
+  right: 0;
+  bottom: 0;
   display: flex;
   align-items: flex-end;
-  gap: 8px;
-  min-width: 190px;
-  min-height: 104px;
-  padding: 18px 22px 20px;
+  justify-content: center;
+  gap: 10px;
+  min-width: 420px;
+  min-height: 190px;
+  padding: 58px 42px 28px;
   background: url("/assets/ui/items/holder.png") center bottom / 100% 100% no-repeat;
   z-index: 20;
 }
@@ -414,8 +415,9 @@ button { cursor: pointer; }
 }
 
 .minion-slot.empty {
-  border: 1px dashed rgba(255,255,255,.10);
-  background: rgba(255,255,255,.018);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .minion-unit {
@@ -532,6 +534,10 @@ button { cursor: pointer; }
   overflow: visible;
 }
 
+.hand .card {
+  box-shadow: 0 7px 12px rgba(0,0,0,.24);
+}
+
 .hand .card + .card {
   margin-left: -34px;
 }
@@ -556,7 +562,7 @@ button { cursor: pointer; }
   border-radius: 12px;
   padding: 11px;
   display: grid;
-  grid-template-rows: 104px auto 1fr auto;
+  grid-template-rows: 82px auto 1fr auto;
   gap: 7px;
   background: url("/assets/cards/base/card-base.png") center / 100% 100% no-repeat;
   color: #17120d;
@@ -588,8 +594,8 @@ button.card:hover {
   position: relative;
   z-index: 50;
   transform: translateY(-28px) rotate(0deg) scale(1.08);
-  box-shadow: 0 22px 38px rgba(0,0,0,.46);
-  filter: brightness(1.05);
+  box-shadow: 0 8px 14px rgba(0,0,0,.26);
+  filter: none;
 }
 
 .card-too-expensive .card-cost {
@@ -623,7 +629,16 @@ button.card:hover {
   opacity: 0;
 }
 
-.card-art { border-radius: 8px; border: 0; background-position: center; background-size: cover; background-repeat: no-repeat; }
+.card-art {
+  width: 84%;
+  height: 100%;
+  justify-self: center;
+  border-radius: 7px;
+  border: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 .card-name { font-weight: 850; }
 .card-text { font-size: 13px; line-height: 1.35; color: #c3c9d2; }
 .card-cost { font-weight: 900; }
@@ -655,12 +670,12 @@ button.card:hover {
     flex-basis: 34px;
   }
   .item-bar {
-    right: 12px;
-    bottom: 68px;
-    min-width: 158px;
-    min-height: 92px;
-    padding: 14px 16px 16px;
-    flex-direction: column;
+    right: 0;
+    bottom: 0;
+    min-width: 280px;
+    min-height: 150px;
+    padding: 46px 24px 18px;
+    flex-direction: row;
   }
   .item-button {
     width: 132px;
@@ -683,7 +698,7 @@ button.card:hover {
   .hand .card + .card {
     margin-left: -42px;
   }
-  .card { width: 148px; min-height: 216px; grid-template-rows: 88px auto 1fr auto; }
+  .card { width: 148px; min-height: 216px; grid-template-rows: 70px auto 1fr auto; }
   .card-back { width: 82px; }
   .hero { grid-template-columns: 58px 1fr; }
   .hero-portrait { width: 54px; }
