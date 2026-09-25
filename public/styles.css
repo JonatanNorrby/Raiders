@@ -192,6 +192,22 @@ button { cursor: pointer; }
   text-align: left;
 }
 button.card:hover:not(:disabled) { transform: translateY(-4px); border-color: #7b8799; }
+
+.card-play-ghost {
+  position: fixed;
+  z-index: 1000;
+  margin: 0;
+  pointer-events: none;
+  transform: translate(0, 0) scale(1);
+  opacity: 1;
+  transition: transform 260ms ease-out, opacity 260ms ease-out;
+}
+
+.card-play-ghost-active {
+  transform: translate(var(--play-x), var(--play-y)) scale(.82);
+  opacity: 0;
+}
+
 .card-art { border-radius: 8px; border: 1px solid rgba(255,255,255,.12); background: #171b21 center / cover no-repeat; }
 .card-name { font-weight: 850; }
 .card-text { font-size: 13px; line-height: 1.35; color: #c3c9d2; }

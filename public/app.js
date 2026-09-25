@@ -378,8 +378,30 @@ function renderGame() {
 
   document.querySelector("#end-turn").onclick = () => send({ type: "end_turn" });
   document.querySelectorAll(".card[data-card-index]").forEach((button) => {
-    button.onclick = () => send({ type: "play_card", cardIndex: Number(button.dataset.cardIndex) });
+    button.onclick = () => playCard(button);
   });
+}
+
+function playCard(button) {
+  const cardIndex = Number(button.dataset.cardIndex);
+  const rect = button.getBoundingClientRect();
+  const ghost = button.cloneNode(true);
+
+  ghost.classList.add("card-play-ghost");
+  ghost.removeAttribute("data-card-index");
+  ghost.disabled = true;
+  ghost.style.left = rect.left + "px";
+  ghost.style.top = rect.top + "px";
+  ghost.style.width = rect.width + "px";
+  ghost.style.height = rect.height + "px";
+  ghost.style.setProperty("--play-x", (window.innerWidth / 2 - rect.left - rect.width / 2) + "px");
+  ghost.style.setProperty("--play-y", (window.innerHeight / 2 - rect.top - rect.height / 2) + "px");
+
+  document.body.appendChild(ghost);
+  requestAnimationFrame(() => ghost.classList.add("card-play-ghost-active"));
+  ghost.addEventListener("transitionend", () => ghost.remove(), { once: true });
+
+  send({ type: "play_card", cardIndex });
 }
 
 function heroHtml(player, isYou) {
