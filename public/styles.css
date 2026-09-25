@@ -1,6 +1,6 @@
 :root {
   color-scheme: light;
-  font-family: Georgia, "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-family: "Copperplate", "Copperplate Gothic Light", "Palatino Linotype", Georgia, serif;
   background: #0f1115;
   color: #17120d;
 }
@@ -615,8 +615,8 @@ button.card:hover:not(:disabled) {
 /* Fantasy typography + black-text theme */
 body,
 body * {
-  font-family: Georgia, "Palatino Linotype", "Book Antiqua", Palatino, serif;
-  color: #17120d;
+  font-family: "Copperplate", "Copperplate Gothic Light", "Palatino Linotype", Georgia, serif;
+  color: #17120d !important;
 }
 
 .panel,
@@ -625,6 +625,9 @@ body * {
 .pool-row,
 .hero,
 .item-button,
+.minion-unit,
+.stat,
+.small-button,
 .game-over,
 .toast {
   background-color: rgba(226, 207, 164, .94);
