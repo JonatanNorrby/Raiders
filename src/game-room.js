@@ -260,6 +260,7 @@ export class GameRoom extends DurableObject {
 
     player.mana -= card.cost;
     player.hand.splice(cardIndex, 1);
+    player.deck.push(cardId);
 
     if (card.effect.type === "armor") {
       player.armor += card.effect.value;
