@@ -60,7 +60,7 @@ button { cursor: pointer; }
 }
 
 .menu {
-  width: min(440px, 100%);
+  width: min(900px, 100%);
   margin: 0;
   padding: 0;
   text-align: center;
@@ -71,10 +71,14 @@ button { cursor: pointer; }
 
 .menu-logo {
   display: block;
-  width: min(300px, 82%);
-  max-height: 150px;
+  width: min(900px, 92vw);
+  max-height: 450px;
   margin: 0 auto 12px;
   object-fit: contain;
+}
+
+.play-menu {
+  width: min(440px, 100%);
 }
 
 .play-menu h2 {
