@@ -363,7 +363,6 @@ function renderGame() {
       </div>
       <div class="turn-center">${center}</div>
       <div>
-        <div class="hero-row">${heroHtml(you, true)}</div>
         <div class="hand">${you.hand.map((cardId, index) => cardHtml(cardId, index, yourTurn, you.mana)).join("")}</div>
       </div>
       <div class="player-hud" aria-label="Your health and mana">
