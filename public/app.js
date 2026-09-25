@@ -1,5 +1,4 @@
 const app = document.querySelector("#app");
-const decksButton = document.querySelector("#decks-button");
 const toast = document.querySelector("#toast");
 
 const DECK_STORAGE_KEY = "deckborn.decks.v1";
@@ -12,11 +11,6 @@ let room = null;
 let selectedLobbyDeckId = null;
 let selectedLobbyItemId = null;
 let editingDeck = null;
-
-decksButton.addEventListener("click", () => {
-  leaveSession();
-  renderDeckBuilder();
-});
 
 boot();
 
