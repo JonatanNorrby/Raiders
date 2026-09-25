@@ -302,7 +302,10 @@ function renderDeckBuilder() {
           <h1>Build Decks</h1>
           <div class="muted">Saved locally and reusable across games.</div>
         </div>
-        <button class="button" id="new-deck">New Deck</button>
+        <div class="inline">
+          <button class="button" id="back-main-menu">Back to Main Menu</button>
+          <button class="button" id="new-deck">New Deck</button>
+        </div>
       </div>
 
       <div class="deck-builder">
@@ -323,6 +326,11 @@ function renderDeckBuilder() {
         </div>
       </div>
     </section>`;
+
+  document.querySelector("#back-main-menu").onclick = () => {
+    editingDeck = null;
+    renderHome();
+  };
 
   document.querySelectorAll(".deck-choice").forEach((button) => {
     button.onclick = () => {
