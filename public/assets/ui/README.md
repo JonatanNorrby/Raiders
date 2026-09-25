@@ -11,5 +11,6 @@ Optional PNGs currently prepared by the frontend:
 - card-back.png — reserved for showing hidden opponent cards later.
 - health.png — icon/art displayed beside the player's Health value in the bottom-left HUD.
 - mana.png — icon/art displayed beside the player's Mana value in the bottom-left HUD.
+- items/holder.png — artwork behind the player's item controls in the lower-right corner.
 
 The prototype works without these files and uses CSS fallbacks.
