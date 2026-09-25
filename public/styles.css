@@ -138,11 +138,44 @@ button { cursor: pointer; }
 .small-button { width: 34px; height: 34px; border-radius: 8px; border: 1px solid #363d48; background: #242a33; color: #fff; }
 
 .battlefield {
+  position: relative;
   min-height: calc(100vh - 132px);
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: 16px;
   background: linear-gradient(rgba(15,17,21,.72), rgba(15,17,21,.72)), url("/assets/ui/battlefield-background.png") center / cover no-repeat, #15191f;
+}
+
+.player-hud {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  display: flex;
+  gap: 10px;
+  z-index: 20;
+}
+
+.hud-stat {
+  min-width: 92px;
+  border: 1px solid #3b4350;
+  border-radius: 10px;
+  padding: 9px 12px;
+  background: rgba(14, 17, 22, .94);
+  box-shadow: 0 10px 28px rgba(0,0,0,.28);
+}
+
+.hud-stat strong {
+  display: block;
+  font-size: 20px;
+}
+
+.hud-label {
+  display: block;
+  margin-bottom: 2px;
+  color: #969eaa;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
 }
 
 .hero-row { display: flex; justify-content: center; }
@@ -190,8 +223,18 @@ button { cursor: pointer; }
   background: linear-gradient(rgba(20,23,29,.18), rgba(20,23,29,.18)), url("/assets/cards/base/card-base.png") center / cover no-repeat, #222730;
   color: #fff;
   text-align: left;
+  transform-origin: bottom center;
+  transition: transform 170ms ease-out, border-color 170ms ease-out, box-shadow 170ms ease-out, filter 170ms ease-out;
 }
-button.card:hover:not(:disabled) { transform: translateY(-4px); border-color: #7b8799; }
+
+button.card:hover:not(:disabled) {
+  position: relative;
+  z-index: 10;
+  transform: translateY(-16px) scale(1.06);
+  border-color: #8f9caf;
+  box-shadow: 0 18px 34px rgba(0,0,0,.42);
+  filter: brightness(1.08);
+}
 
 .card-play-ghost {
   position: fixed;
@@ -227,6 +270,14 @@ button.card:hover:not(:disabled) { transform: translateY(-4px); border-color: #7
 }
 
 @media (max-width: 760px) {
+  .player-hud {
+    left: 12px;
+    bottom: 12px;
+  }
+  .hud-stat {
+    min-width: 72px;
+    padding: 7px 9px;
+  }
   .lobby-grid, .deck-builder { grid-template-columns: 1fr; }
   .inline { flex-direction: column; }
   .card { width: 132px; min-height: 198px; }

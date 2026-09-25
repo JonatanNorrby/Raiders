@@ -366,6 +366,16 @@ function renderGame() {
         <div class="hero-row">${heroHtml(you, true)}</div>
         <div class="hand">${you.hand.map((cardId, index) => cardHtml(cardId, index, yourTurn, you.mana)).join("")}</div>
       </div>
+      <div class="player-hud" aria-label="Your health and mana">
+        <div class="hud-stat">
+          <span class="hud-label">Health</span>
+          <strong>${you.health}</strong>
+        </div>
+        <div class="hud-stat">
+          <span class="hud-label">Mana</span>
+          <strong>${you.mana}/${you.maxMana}</strong>
+        </div>
+      </div>
     </section>`;
 
   if (room.phase === "finished") {
@@ -407,16 +417,17 @@ function playCard(button) {
 function heroHtml(player, isYou) {
   if (!player) return '<div class="hero"><div class="muted">Waiting for opponent…</div></div>';
   const handText = isYou ? "" : '<span class="stat">Hand ' + player.handCount + '</span>';
+  const combatStats = isYou
+    ? `<span class="stat">Armor ${player.armor}</span><span class="stat">Deck ${player.deckCount}</span>`
+    : `<span class="stat">HP ${player.health}</span><span class="stat">Armor ${player.armor}</span><span class="stat">Mana ${player.mana}/${player.maxMana}</span><span class="stat">Deck ${player.deckCount}</span>`;
+
   return `
     <div class="hero">
       <div class="hero-portrait"></div>
       <div>
         <div class="hero-name">${isYou ? "You" : "Opponent"} · ${escapeHtml(catalog.character.name)}</div>
         <div class="hero-stats">
-          <span class="stat">HP ${player.health}</span>
-          <span class="stat">Armor ${player.armor}</span>
-          <span class="stat">Mana ${player.mana}/${player.maxMana}</span>
-          <span class="stat">Deck ${player.deckCount}</span>
+          ${combatStats}
           ${handText}
         </div>
       </div>
