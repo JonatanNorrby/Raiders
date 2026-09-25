@@ -274,6 +274,82 @@ button { cursor: pointer; }
   filter: brightness(1.08);
 }
 
+.minion-zone {
+  margin: 10px auto;
+  width: min(920px, 100%);
+}
+
+.minion-zone-label {
+  margin-bottom: 6px;
+  color: #9fa8b5;
+  font-size: 11px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.minion-slots {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.minion-slot,
+.minion-unit {
+  min-width: 0;
+  min-height: 82px;
+  border-radius: 9px;
+}
+
+.minion-slot.empty {
+  border: 1px dashed rgba(255,255,255,.10);
+  background: rgba(255,255,255,.018);
+}
+
+.minion-unit {
+  position: relative;
+  padding: 5px;
+  border: 1px solid #46505d;
+  background: rgba(15,18,23,.92);
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,.22);
+}
+
+.minion-unit.taunt {
+  border-color: #9ba8bb;
+  box-shadow: 0 0 0 2px rgba(155,168,187,.18), 0 6px 16px rgba(0,0,0,.22);
+}
+
+.minion-art {
+  height: 38px;
+  border-radius: 6px;
+  background: #202630 center / cover no-repeat;
+}
+
+.minion-name {
+  margin-top: 4px;
+  overflow: hidden;
+  font-size: 10px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.minion-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+.minion-keywords {
+  margin-top: 2px;
+  color: #bcc6d4;
+  font-size: 9px;
+  line-height: 1.1;
+}
+
 .hero-row { display: flex; justify-content: center; }
 .hero {
   width: min(460px, 100%);
@@ -438,6 +514,13 @@ button.card:hover:not(:disabled) {
   .item-button {
     width: 132px;
     min-height: 58px;
+  }
+  .minion-slots {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .minion-slot,
+  .minion-unit {
+    min-height: 70px;
   }
   .lobby-grid, .deck-builder, .lobby-loadout { grid-template-columns: 1fr; }
   .inline { flex-direction: column; }

@@ -397,9 +397,11 @@ function renderGame() {
       <div>
         <div class="hero-row">${heroHtml(enemy, false)}</div>
         <div class="opponent-hand">${opponentHandHtml(enemy)}</div>
+        ${minionZoneHtml(enemy?.minions || [], "Opponent")}
       </div>
       <div class="turn-center card-drop-zone">${center}</div>
       <div>
+        ${minionZoneHtml(you.minions || [], "You")}
         <div class="hand">${you.hand.map((cardId, index) => cardHtml(cardId, index, yourTurn, you.mana)).join("")}</div>
       </div>
       <div class="player-hud" aria-label="Your health and mana">
@@ -525,6 +527,36 @@ function heroHtml(player, isYou) {
           ${handText}
         </div>
       </div>
+    </div>`;
+}
+
+function minionZoneHtml(minions, ownerLabel) {
+  const slots = Array.from({ length: 10 }, (_, index) => {
+    const minion = minions[index];
+    if (!minion) return '<div class="minion-slot empty" aria-hidden="true"></div>';
+    return minionHtml(minion);
+  }).join("");
+
+  return `
+    <div class="minion-zone">
+      <div class="minion-zone-label">${escapeHtml(ownerLabel)} minions · ${minions.length}/10</div>
+      <div class="minion-slots">${slots}</div>
+    </div>`;
+}
+
+function minionHtml(minion) {
+  const card = catalog.cards.find((entry) => entry.id === minion.cardId);
+  const keywords = [
+    minion.taunt ? "Taunt" : "",
+    minion.endTurnHeal ? "Healer" : ""
+  ].filter(Boolean).join(" · ");
+
+  return `
+    <div class="minion-unit ${minion.taunt ? "taunt" : ""}" title="${escapeHtml(minion.name)}">
+      <div class="minion-art" style="background-image:url('${card?.art || ""}')"></div>
+      <div class="minion-name">${escapeHtml(minion.name)}</div>
+      <div class="minion-stats"><strong>${minion.attack}</strong><span>/</span><strong>${minion.health}</strong></div>
+      ${keywords ? `<div class="minion-keywords">${escapeHtml(keywords)}</div>` : ""}
     </div>`;
 }
 

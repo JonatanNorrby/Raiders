@@ -181,6 +181,7 @@ export class GameRoom extends DurableObject {
       bonusItemGranted: false,
       deck: [],
       hand: [],
+      minions: [],
       health: CHARACTER.maxHealth,
       armor: 0,
       mana: 0,
@@ -255,6 +256,7 @@ export class GameRoom extends DurableObject {
       player.mana = 0;
       player.maxMana = 0;
       player.hand = [];
+      player.minions = [];
       player.items = [player.selectedItemId];
       player.bonusItemGranted = false;
       player.deck = shuffle(player.selectedDeck);
@@ -294,12 +296,31 @@ export class GameRoom extends DurableObject {
       throw new Error("Not enough mana.");
     }
 
+    if (card.effect.type === "summon" && player.minions.length >= 10) {
+      throw new Error("Your battlefield is full.");
+    }
+
     player.mana -= card.cost;
     player.hand.splice(cardIndex, 1);
     player.deck.push(cardId);
 
     if (card.effect.type === "armor") {
       player.armor += card.effect.value;
+      return;
+    }
+
+    if (card.effect.type === "summon") {
+      const template = card.effect.minion;
+      player.minions.push({
+        id: crypto.randomUUID(),
+        cardId: card.id,
+        name: card.name,
+        attack: template.attack,
+        health: template.health,
+        maxHealth: template.health,
+        taunt: Boolean(template.taunt),
+        endTurnHeal: template.endTurnHeal || 0
+      });
       return;
     }
 
@@ -383,6 +404,8 @@ export class GameRoom extends DurableObject {
       throw new Error("Opponent missing.");
     }
 
+    this.resolveEndTurnMinionEffects(player);
+
     this.room.turn += 1;
     this.room.turnPlayerId = nextPlayer.id;
     nextPlayer.maxMana = Math.min(DECK_RULES.maxMana, nextPlayer.maxMana + 1);
@@ -394,6 +417,17 @@ export class GameRoom extends DurableObject {
       if (bonusItemId) {
         nextPlayer.items.push(bonusItemId);
         nextPlayer.bonusItemGranted = true;
+      }
+    }
+  }
+
+  resolveEndTurnMinionEffects(player) {
+    const healers = player.minions.filter((minion) => minion.endTurnHeal > 0);
+
+    for (const healer of healers) {
+      for (const minion of player.minions) {
+        if (minion.id === healer.id) continue;
+        minion.health = Math.min(minion.maxHealth, minion.health + healer.endTurnHeal);
       }
     }
   }
@@ -453,6 +487,7 @@ export class GameRoom extends DurableObject {
           mana: you.mana,
           maxMana: you.maxMana,
           hand: [...you.hand],
+          minions: you.minions.map((minion) => ({ ...minion })),
           deckCount: you.deck.length
         } : null,
         opponent: enemy ? {
@@ -464,6 +499,7 @@ export class GameRoom extends DurableObject {
           mana: enemy.mana,
           maxMana: enemy.maxMana,
           handCount: enemy.hand.length,
+          minions: enemy.minions.map((minion) => ({ ...minion })),
           deckCount: enemy.deck.length
         } : null
       }

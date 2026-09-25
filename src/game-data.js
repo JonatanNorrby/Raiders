@@ -36,6 +36,39 @@ export const CARDS = Object.freeze([
     text: "Deal 4 damage to the enemy Raider.",
     art: "/assets/cards/art/firebomb.png",
     effect: { type: "damage", value: 4 }
+  },
+  {
+    id: "shieldguard",
+    name: "Shieldguard",
+    cost: 2,
+    text: "Summon a 1/4 minion with Taunt.",
+    art: "/assets/cards/art/shieldguard.png",
+    effect: {
+      type: "summon",
+      minion: { attack: 1, health: 4, taunt: true }
+    }
+  },
+  {
+    id: "footman",
+    name: "Footman",
+    cost: 2,
+    text: "Summon a 3/2 minion.",
+    art: "/assets/cards/art/footman.png",
+    effect: {
+      type: "summon",
+      minion: { attack: 3, health: 2 }
+    }
+  },
+  {
+    id: "field-medic",
+    name: "Field Medic",
+    cost: 3,
+    text: "Summon a 1/3 minion. At the end of your turn, heal your other minions for 1.",
+    art: "/assets/cards/art/field-medic.png",
+    effect: {
+      type: "summon",
+      minion: { attack: 1, health: 3, endTurnHeal: 1 }
+    }
   }
 ]);
 
