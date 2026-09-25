@@ -15,6 +15,21 @@ button { cursor: pointer; }
 
 .app-shell { width: min(1100px, calc(100% - 28px)); margin: 34px auto; }
 
+.lobby-active {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background:
+    linear-gradient(rgba(20, 15, 10, .18), rgba(20, 15, 10, .18)),
+    url("/assets/ui/lobby/background.png") center / cover fixed no-repeat,
+    radial-gradient(circle at top, rgba(255,255,255,.05), transparent 34rem),
+    #0f1115;
+}
+
+.lobby-active .app-shell {
+  min-height: calc(100vh - 68px);
+  min-height: calc(100dvh - 68px);
+}
+
 .game-active {
   overflow: hidden;
 }

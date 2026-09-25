@@ -4,6 +4,7 @@ Optional PNGs currently prepared by the frontend:
 
 - battlefield-background.png — background behind the match board.
 - main-menu/background.png — full-screen background used on the main menu and Play screen.
+- lobby/background.png — full-screen background used in multiplayer lobbies.
 - main-menu/buttons/play.png — artwork for the main-menu Play button.
 - main-menu/buttons/decks.png — artwork for the main-menu Build Decks button.
 - logo.png — reserved for a future graphical Deckborn logo.

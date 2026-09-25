@@ -63,11 +63,12 @@ function leaveSession() {
   room = null;
   selectedLobbyDeckId = null;
   selectedLobbyItemId = null;
-  document.body.classList.remove("game-active");
+  document.body.classList.remove("game-active", "lobby-active");
 }
 
 function renderHome() {
   editingDeck = null;
+  document.body.classList.remove("lobby-active");
   document.body.classList.add("main-menu-active");
   app.innerHTML = `
     <section class="menu">
@@ -104,6 +105,7 @@ function prepareMenuButtonArt() {
 }
 
 function renderPlay() {
+  document.body.classList.remove("lobby-active");
   document.body.classList.add("main-menu-active");
   app.innerHTML = `
     <section class="menu play-menu">
@@ -213,7 +215,8 @@ function send(message) {
 }
 
 function renderLobby() {
-  document.body.classList.remove("main-menu-active");
+  document.body.classList.remove("main-menu-active", "game-active");
+  document.body.classList.add("lobby-active");
   const players = room?.players || [];
   const deckOptions = decks.map((deck) => `
     <option value="${escapeHtml(deck.id)}" ${deck.id === selectedLobbyDeckId ? "selected" : ""}>${escapeHtml(deck.name)}</option>`).join("");
@@ -284,7 +287,7 @@ function renderLobby() {
 }
 
 function renderDeckBuilder() {
-  document.body.classList.remove("main-menu-active");
+  document.body.classList.remove("main-menu-active", "lobby-active");
   if (!editingDeck) {
     editingDeck = cloneDeck(decks[0] || { id: crypto.randomUUID(), name: "New Deck", cards: [] });
   }
@@ -399,6 +402,7 @@ function renderDeckBuilder() {
 }
 
 function renderGame() {
+  document.body.classList.remove("lobby-active");
   document.body.classList.add("game-active");
 
   const you = room.you;
