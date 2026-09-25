@@ -1,13 +1,16 @@
 :root {
-  color-scheme: dark;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: light;
+  font-family: Georgia, "Palatino Linotype", "Book Antiqua", Palatino, serif;
   background: #0f1115;
-  color: #f3f4f6;
+  color: #17120d;
 }
 
 * { box-sizing: border-box; }
 body { margin: 0; min-height: 100vh; background: radial-gradient(circle at top, rgba(255,255,255,.05), transparent 34rem), #0f1115; }
-button, input, select { font: inherit; }
+button, input, select {
+  font: inherit;
+  color: #17120d;
+}
 button { cursor: pointer; }
 
 .app-shell { width: min(1100px, calc(100% - 28px)); margin: 34px auto; }
@@ -90,7 +93,7 @@ button { cursor: pointer; }
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #969eaa;
+  color: #17120d;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: .08em;
@@ -104,7 +107,7 @@ button { cursor: pointer; }
   background: rgba(255,255,255,.16);
 }
 
-.muted { color: #969eaa; }
+.muted { color: #17120d; opacity: .72; }
 .stack { display: grid; gap: 10px; }
 .menu-actions { margin-top: 28px; }
 
@@ -122,7 +125,7 @@ button { cursor: pointer; }
   border: 0;
   padding: 0;
   background: transparent;
-  color: #f4f5f7;
+  color: #17120d;
   font-weight: 800;
   filter: drop-shadow(0 12px 10px rgba(0,0,0,.72)) drop-shadow(0 4px 3px rgba(0,0,0,.52));
   transition: transform 150ms ease-out, filter 150ms ease-out;
@@ -146,10 +149,13 @@ button { cursor: pointer; }
 }
 
 .menu-art-button:not(.has-art) {
-  border: 1px solid #343a45;
-  border-radius: 9px;
+  border: 2px solid #5c4028;
+  border-radius: 7px;
   padding: 10px 16px;
-  background: #232832;
+  background: linear-gradient(#d7bc86, #b78b50);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.42),
+    inset 0 -3px 0 rgba(79,48,25,.26);
 }
 
 .menu-art-button:hover {
@@ -158,29 +164,52 @@ button { cursor: pointer; }
 }
 
 .button {
-  min-height: 44px;
-  border: 1px solid #343a45;
-  border-radius: 9px;
-  padding: 10px 16px;
-  background: #232832;
-  color: #f4f5f7;
-  font-weight: 700;
+  min-height: 46px;
+  border: 2px solid #5c4028;
+  border-radius: 7px;
+  padding: 10px 18px;
+  background: linear-gradient(#d8bd87, #b98e53);
+  color: #17120d;
+  font-weight: 800;
+  letter-spacing: .025em;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.45),
+    inset 0 -3px 0 rgba(74,43,21,.24),
+    0 5px 10px rgba(0,0,0,.28);
+  transition: transform 120ms ease-out, filter 120ms ease-out, box-shadow 120ms ease-out;
 }
 
-.button:hover:not(:disabled) { background: #2c333f; }
-.button.primary { background: #e7e9ed; color: #111318; border-color: #e7e9ed; }
-.button.primary:hover:not(:disabled) { background: #fff; }
-.button.danger { color: #ffb4b4; }
+.button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.5),
+    inset 0 -3px 0 rgba(74,43,21,.24),
+    0 7px 13px rgba(0,0,0,.34);
+}
+
+.button.primary {
+  background: linear-gradient(#ead39f, #c9a05f);
+  color: #17120d;
+  border-color: #4c321f;
+}
+
+.button.primary:hover:not(:disabled) {
+  background: linear-gradient(#f0dda9, #d2ab69);
+}
+
+.button.danger { color: #17120d; }
 .button:disabled { cursor: not-allowed; opacity: .42; }
 
 .text-input, .select {
   width: 100%;
   min-height: 44px;
-  border: 1px solid #343a45;
-  border-radius: 9px;
-  background: #101318;
-  color: #f3f4f6;
+  border: 2px solid #6d4b2e;
+  border-radius: 7px;
+  background: #e8d6aa;
+  color: #17120d;
   padding: 10px 12px;
+  box-shadow: inset 0 1px 4px rgba(63,38,19,.18);
 }
 
 .inline { display: flex; gap: 10px; }
@@ -580,4 +609,37 @@ button.card:hover:not(:disabled) {
   .card { width: 132px; min-height: 198px; }
   .hero { grid-template-columns: 58px 1fr; }
   .hero-portrait { width: 54px; }
+}
+
+
+/* Fantasy typography + black-text theme */
+body,
+body * {
+  font-family: Georgia, "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  color: #17120d;
+}
+
+.panel,
+.player-slot,
+.deck-row,
+.pool-row,
+.hero,
+.item-button,
+.game-over,
+.toast {
+  background-color: rgba(226, 207, 164, .94);
+  border-color: #6d4b2e;
+}
+
+.card {
+  color: #17120d;
+}
+
+.card-text,
+.hud-label,
+.item-button span,
+.hero-stats,
+.minion-zone-label,
+.minion-keywords {
+  color: #17120d;
 }
