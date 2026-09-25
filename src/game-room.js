@@ -439,9 +439,7 @@ export class GameRoom extends DurableObject {
         players: this.room.players.map((player) => ({
           id: player.id,
           name: player.name,
-          ready: player.ready,
-          deckName: player.deckName,
-          itemSelected: Boolean(player.selectedItemId)
+          ready: player.ready
         })),
         you: you ? {
           id: you.id,
@@ -461,7 +459,6 @@ export class GameRoom extends DurableObject {
           id: enemy.id,
           name: enemy.name,
           ready: enemy.ready,
-          deckName: enemy.deckName,
           health: enemy.health,
           armor: enemy.armor,
           mana: enemy.mana,

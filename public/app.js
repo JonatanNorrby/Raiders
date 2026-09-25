@@ -212,9 +212,7 @@ function renderLobby() {
     return `
       <div class="player-slot ${player?.ready ? "ready" : ""}">
         <strong>${player ? escapeHtml(player.name) : "Waiting for player…"}</strong>
-        <p class="muted">${player?.deckName ? "Deck: " + escapeHtml(player.deckName) : "No deck selected"}</p>
-        <p class="muted">${player ? (player.itemSelected ? "Starter item selected" : "No starter item selected") : ""}</p>
-        <div>${player?.ready ? "Ready" : player ? "Not ready" : ""}</div>
+        <div class="muted">${player?.ready ? "Ready" : player ? "Not ready" : ""}</div>
       </div>`;
   }).join("");
 
