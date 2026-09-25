@@ -80,7 +80,7 @@ function renderHome() {
   editingDeck = null;
   app.innerHTML = `
     <section class="panel menu">
-      <h1>DECKBORN</h1>
+      <img class="menu-logo" src="/assets/ui/logo.png" alt="Deckborn">
       <p class="muted">Two-player card battler prototype.</p>
       <div class="stack menu-actions">
         <button class="button primary" id="start-game">Start Game</button>
@@ -357,7 +357,10 @@ function renderGame() {
 
   app.innerHTML = `
     <section class="panel battlefield">
-      <div class="hero-row">${heroHtml(enemy, false)}</div>
+      <div>
+        <div class="hero-row">${heroHtml(enemy, false)}</div>
+        <div class="opponent-hand">${opponentHandHtml(enemy)}</div>
+      </div>
       <div class="turn-center">${center}</div>
       <div>
         <div class="hero-row">${heroHtml(you, true)}</div>
@@ -396,6 +399,14 @@ function heroHtml(player, isYou) {
         </div>
       </div>
     </div>`;
+}
+
+function opponentHandHtml(player) {
+  if (!player || !player.handCount) return "";
+
+  return Array.from({ length: player.handCount }, (_, index) =>
+    `<div class="card-back" aria-label="Hidden opponent card ${index + 1}"></div>`
+  ).join("");
 }
 
 function cardHtml(cardId, index, yourTurn, mana) {

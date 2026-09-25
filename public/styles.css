@@ -21,7 +21,17 @@ button { cursor: pointer; }
 }
 
 .brand, .nav-button { border: 0; background: transparent; color: inherit; }
-.brand { font-weight: 900; letter-spacing: .16em; }
+.brand {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+.brand-logo {
+  display: block;
+  width: 132px;
+  max-height: 44px;
+  object-fit: contain;
+}
 .nav-button { color: #b7bdc8; }
 .app-shell { width: min(1100px, calc(100% - 28px)); margin: 34px auto; }
 
@@ -58,7 +68,13 @@ button { cursor: pointer; }
 }
 
 .menu { width: min(440px, 100%); margin: 9vh auto 0; text-align: center; }
-.menu h1 { margin: 0 0 8px; font-size: 44px; letter-spacing: .08em; }
+.menu-logo {
+  display: block;
+  width: min(300px, 82%);
+  max-height: 150px;
+  margin: 0 auto 12px;
+  object-fit: contain;
+}
 .muted { color: #969eaa; }
 .stack { display: grid; gap: 10px; }
 .menu-actions { margin-top: 28px; }
@@ -146,7 +162,21 @@ button { cursor: pointer; }
 .hero-stats { display: flex; gap: 8px; color: #c7ccd5; flex-wrap: wrap; }
 .stat { border: 1px solid #343a45; border-radius: 999px; padding: 5px 9px; background: #171b22; }
 .turn-center { display: grid; place-items: center; align-content: center; gap: 14px; min-height: 160px; }
-.hand { display: flex; justify-content: center; align-items: end; gap: 10px; flex-wrap: wrap; padding-top: 8px; }
+.hand, .opponent-hand {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+}
+.card-back {
+  width: 76px;
+  aspect-ratio: 2 / 3;
+  border-radius: 8px;
+  background: url("/assets/ui/card-back.png") center / cover no-repeat;
+  box-shadow: 0 8px 22px rgba(0,0,0,.28);
+}
 
 .card {
   width: 154px;
