@@ -366,13 +366,19 @@ function renderGame() {
         <div class="hand">${you.hand.map((cardId, index) => cardHtml(cardId, index, yourTurn, you.mana)).join("")}</div>
       </div>
       <div class="player-hud" aria-label="Your health and mana">
-        <div class="hud-stat">
-          <span class="hud-label">Health</span>
-          <strong>${you.health}</strong>
+        <div class="hud-stat hud-health">
+          <span class="hud-art" aria-hidden="true"></span>
+          <div>
+            <span class="hud-label">Health</span>
+            <strong>${you.health}</strong>
+          </div>
         </div>
-        <div class="hud-stat">
-          <span class="hud-label">Mana</span>
-          <strong>${you.mana}/${you.maxMana}</strong>
+        <div class="hud-stat hud-mana">
+          <span class="hud-art" aria-hidden="true"></span>
+          <div>
+            <span class="hud-label">Mana</span>
+            <strong>${you.mana}/${you.maxMana}</strong>
+          </div>
         </div>
       </div>
     </section>`;
