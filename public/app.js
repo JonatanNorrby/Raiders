@@ -1,5 +1,4 @@
 const app = document.querySelector("#app");
-const homeButton = document.querySelector("#home-button");
 const decksButton = document.querySelector("#decks-button");
 const toast = document.querySelector("#toast");
 
@@ -13,11 +12,6 @@ let room = null;
 let selectedLobbyDeckId = null;
 let selectedLobbyItemId = null;
 let editingDeck = null;
-
-homeButton.addEventListener("click", () => {
-  leaveSession();
-  renderHome();
-});
 
 decksButton.addEventListener("click", () => {
   leaveSession();

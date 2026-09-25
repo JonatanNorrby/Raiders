@@ -15,24 +15,12 @@ button { cursor: pointer; }
   padding: 0 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   border-bottom: 1px solid #262a31;
   background: rgba(15, 17, 21, .92);
 }
 
-.brand, .nav-button { border: 0; background: transparent; color: inherit; }
-.brand {
-  display: flex;
-  align-items: center;
-  padding: 0;
-}
-.brand-logo {
-  display: block;
-  width: 132px;
-  max-height: 44px;
-  object-fit: contain;
-}
-.nav-button { color: #b7bdc8; }
+.nav-button { border: 0; background: transparent; color: #b7bdc8; }
 .app-shell { width: min(1100px, calc(100% - 28px)); margin: 34px auto; }
 
 .game-active {
