@@ -73,6 +73,7 @@ function leaveSession() {
   session = null;
   room = null;
   selectedLobbyDeckId = null;
+  document.body.classList.remove("game-active");
 }
 
 function renderHome() {
@@ -343,6 +344,8 @@ function renderDeckBuilder() {
 }
 
 function renderGame() {
+  document.body.classList.add("game-active");
+
   const you = room.you;
   const enemy = room.opponent;
   const yourTurn = room.phase === "playing" && room.turnPlayerId === you.id;

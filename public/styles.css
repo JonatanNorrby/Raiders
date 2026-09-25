@@ -25,6 +25,30 @@ button { cursor: pointer; }
 .nav-button { color: #b7bdc8; }
 .app-shell { width: min(1100px, calc(100% - 28px)); margin: 34px auto; }
 
+.game-active {
+  overflow: hidden;
+}
+
+.game-active .topbar {
+  display: none;
+}
+
+.game-active .app-shell {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+}
+
+.game-active .battlefield {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
 .panel {
   border: 1px solid #2a2f38;
   background: #171a20;
