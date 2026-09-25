@@ -26,8 +26,18 @@ button { cursor: pointer; }
 }
 
 .lobby-active .app-shell {
-  min-height: calc(100vh - 68px);
-  min-height: calc(100dvh - 68px);
+  width: min(1100px, calc(100% - 28px));
+  height: 100vh;
+  height: 100dvh;
+  margin: 0 auto;
+  padding: 24px 0;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+}
+
+.lobby-active .app-shell > .panel {
+  width: 100%;
 }
 
 .game-active {
