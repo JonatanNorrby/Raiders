@@ -11,6 +11,7 @@ let socket = null;
 let session = null;
 let room = null;
 let selectedLobbyDeckId = null;
+let selectedLobbyItemId = null;
 let editingDeck = null;
 
 homeButton.addEventListener("click", () => {
@@ -73,6 +74,7 @@ function leaveSession() {
   session = null;
   room = null;
   selectedLobbyDeckId = null;
+  selectedLobbyItemId = null;
   document.body.classList.remove("game-active");
 }
 
@@ -140,6 +142,7 @@ async function createGame() {
 function enterLobby(code, playerId) {
   session = { code, playerId };
   selectedLobbyDeckId = decks[0]?.id || null;
+  selectedLobbyItemId = catalog.items[0]?.id || null;
   room = null;
   renderLobby();
   connectSocket();
@@ -154,6 +157,7 @@ function connectSocket() {
   socket.onopen = () => {
     const deck = decks.find((item) => item.id === selectedLobbyDeckId);
     if (deck) send({ type: "select_deck", deck });
+    if (selectedLobbyItemId) send({ type: "select_item", itemId: selectedLobbyItemId });
   };
 
   socket.onmessage = (event) => {
@@ -164,7 +168,19 @@ function connectSocket() {
     }
 
     if (message.type === "state") {
+      const previousRoom = room;
       room = message.room;
+
+      if (
+        previousRoom?.phase === "playing" &&
+        room.phase === "playing" &&
+        room.you?.items?.length > previousRoom.you?.items?.length
+      ) {
+        const gainedId = room.you.items.find((id) => !previousRoom.you.items.includes(id)) || room.you.items.at(-1);
+        const gainedItem = catalog.items.find((item) => item.id === gainedId);
+        showToast(gainedItem ? "New item: " + gainedItem.name : "You gained a new item.");
+      }
+
       if (room.phase === "lobby") renderLobby();
       else renderGame();
     }
@@ -187,6 +203,9 @@ function renderLobby() {
   const players = room?.players || [];
   const deckOptions = decks.map((deck) => `
     <option value="${escapeHtml(deck.id)}" ${deck.id === selectedLobbyDeckId ? "selected" : ""}>${escapeHtml(deck.name)}</option>`).join("");
+  const itemOptions = catalog.items.map((item) => `
+    <option value="${escapeHtml(item.id)}" ${item.id === selectedLobbyItemId ? "selected" : ""}>${escapeHtml(item.name)}</option>`).join("");
+  const selectedItem = catalog.items.find((item) => item.id === selectedLobbyItemId);
 
   const playerSlots = [0, 1].map((index) => {
     const player = players[index];
@@ -194,6 +213,7 @@ function renderLobby() {
       <div class="player-slot ${player?.ready ? "ready" : ""}">
         <strong>${player ? escapeHtml(player.name) : "Waiting for player…"}</strong>
         <p class="muted">${player?.deckName ? "Deck: " + escapeHtml(player.deckName) : "No deck selected"}</p>
+        <p class="muted">${player ? (player.itemSelected ? "Starter item selected" : "No starter item selected") : ""}</p>
         <div>${player?.ready ? "Ready" : player ? "Not ready" : ""}</div>
       </div>`;
   }).join("");
@@ -211,12 +231,20 @@ function renderLobby() {
       <div class="lobby-grid">${playerSlots}</div>
 
       <div class="panel deck-editor-card">
-        <h3>Your deck</h3>
-        <div class="inline">
-          <select class="select" id="lobby-deck">${deckOptions}</select>
-          <button class="button primary" id="ready-button" ${!room?.you?.deckName ? "disabled" : ""}>${room?.you?.ready ? "Unready" : "Ready"}</button>
+        <h3>Your loadout</h3>
+        <div class="lobby-loadout">
+          <label>
+            <span class="muted">Deck</span>
+            <select class="select" id="lobby-deck">${deckOptions}</select>
+          </label>
+          <label>
+            <span class="muted">Starter item</span>
+            <select class="select" id="lobby-item">${itemOptions}</select>
+          </label>
         </div>
-        <p class="muted">Both players must choose a deck and press Ready.</p>
+        <p class="muted item-description">${selectedItem ? escapeHtml(selectedItem.text) : "Choose a starter item."}</p>
+        <button class="button primary" id="ready-button" ${!room?.you?.deckName || !room?.you?.selectedItemId ? "disabled" : ""}>${room?.you?.ready ? "Unready" : "Ready"}</button>
+        <p class="muted">Both players must choose a deck and a private starter item, then press Ready.</p>
       </div>
     </section>`;
 
@@ -230,6 +258,12 @@ function renderLobby() {
     selectedLobbyDeckId = deckSelect.value;
     const deck = decks.find((item) => item.id === selectedLobbyDeckId);
     if (deck) send({ type: "select_deck", deck });
+  };
+
+  const itemSelect = document.querySelector("#lobby-item");
+  itemSelect.onchange = () => {
+    selectedLobbyItemId = itemSelect.value;
+    send({ type: "select_item", itemId: selectedLobbyItemId });
   };
 
   document.querySelector("#ready-button").onclick = () => {
@@ -381,6 +415,9 @@ function renderGame() {
           </div>
         </div>
       </div>
+      <div class="item-bar" aria-label="Your items">
+        ${you.items.map((itemId, index) => itemHtml(itemId, index, yourTurn)).join("")}
+      </div>
     </section>`;
 
   if (room.phase === "finished") {
@@ -394,6 +431,9 @@ function renderGame() {
   document.querySelector("#end-turn").onclick = () => send({ type: "end_turn" });
   document.querySelectorAll(".card[data-card-index]").forEach((button) => {
     button.onclick = () => playCard(button);
+  });
+  document.querySelectorAll(".item-button[data-item-index]").forEach((button) => {
+    button.onclick = () => send({ type: "use_item", itemIndex: Number(button.dataset.itemIndex) });
   });
 }
 
@@ -437,6 +477,17 @@ function heroHtml(player, isYou) {
         </div>
       </div>
     </div>`;
+}
+
+function itemHtml(itemId, index, yourTurn) {
+  const item = catalog.items.find((entry) => entry.id === itemId);
+  if (!item) return "";
+
+  return `
+    <button class="item-button" data-item-index="${index}" ${yourTurn ? "" : "disabled"}>
+      <strong>${escapeHtml(item.name)}</strong>
+      <span>${escapeHtml(item.text)}</span>
+    </button>`;
 }
 
 function opponentHandHtml(player) {

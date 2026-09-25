@@ -39,11 +39,40 @@ export const CARDS = Object.freeze([
   }
 ]);
 
+export const ITEMS = Object.freeze([
+  {
+    id: "health-potion",
+    name: "Health Potion",
+    text: "Restore 5 health.",
+    effect: { type: "heal", value: 5 }
+  },
+  {
+    id: "mana-potion",
+    name: "Mana Potion",
+    text: "Gain 2 mana this turn, even above your maximum.",
+    effect: { type: "mana", value: 2 }
+  },
+  {
+    id: "dagger",
+    name: "Dagger",
+    text: "Deal 3 damage to the enemy.",
+    effect: { type: "damage", value: 3 }
+  },
+  {
+    id: "iron-charm",
+    name: "Iron Charm",
+    text: "Gain 4 armor.",
+    effect: { type: "armor", value: 4 }
+  }
+]);
+
 export const CARD_MAP = new Map(CARDS.map((card) => [card.id, card]));
+export const ITEM_MAP = new Map(ITEMS.map((item) => [item.id, item]));
 
 export const PUBLIC_CATALOG = Object.freeze({
   character: CHARACTER,
   cards: CARDS.map(({ effect, ...card }) => card),
+  items: ITEMS.map(({ effect, ...item }) => item),
   deckRules: DECK_RULES
 });
 

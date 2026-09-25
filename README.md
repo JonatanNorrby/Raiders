@@ -7,9 +7,11 @@ Minimal two-player browser card battler built for Cloudflare Workers.
 - Build and save reusable decks in the browser.
 - Start a game to create a lobby and share its six-character code.
 - Join an existing lobby with that code.
-- Both players choose a saved deck and press Ready.
+- Both players choose a saved deck and a private starter item, then press Ready.
+- Starter items are one-use: Health Potion, Mana Potion, Dagger or Iron Charm.
+- Once per game, a player below 50% health gains one additional random item when the opponent ends their turn.
 - The match starts automatically when both players are ready.
-- The server is authoritative for health, armor, mana, turns, draws and card effects.
+- The server is authoritative for health, armor, mana, turns, draws, card effects and items.
 
 The first prototype contains one character (**Raider**) and three cards. Decks are stored in `localStorage` for now so they can be reused across games on the same browser. Account-backed deck storage can be added later without changing the match protocol.
 

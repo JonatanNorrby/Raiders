@@ -119,6 +119,19 @@ button { cursor: pointer; }
   background: #111419;
 }
 .player-slot.ready { border-color: #717b8c; }
+.lobby-loadout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.lobby-loadout label {
+  display: grid;
+  gap: 6px;
+}
+.item-description {
+  min-height: 20px;
+}
 .deck-list, .card-pool { display: grid; gap: 9px; }
 
 .deck-row, .pool-row {
@@ -194,6 +207,46 @@ button { cursor: pointer; }
   text-transform: uppercase;
   letter-spacing: .08em;
   text-shadow: 0 2px 6px rgba(0,0,0,.55);
+}
+
+.item-bar {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  gap: 8px;
+  z-index: 20;
+}
+
+.item-button {
+  width: 150px;
+  min-height: 64px;
+  border: 1px solid #424b58;
+  border-radius: 10px;
+  padding: 9px 10px;
+  background: rgba(16, 20, 26, .94);
+  color: #f3f4f6;
+  text-align: left;
+  box-shadow: 0 10px 28px rgba(0,0,0,.28);
+  transition: transform 150ms ease-out, border-color 150ms ease-out, filter 150ms ease-out;
+}
+
+.item-button strong,
+.item-button span {
+  display: block;
+}
+
+.item-button span {
+  margin-top: 4px;
+  color: #aeb6c2;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.item-button:hover:not(:disabled) {
+  transform: translateY(-5px);
+  border-color: #8592a4;
+  filter: brightness(1.08);
 }
 
 .hero-row { display: flex; justify-content: center; }
@@ -300,7 +353,16 @@ button.card:hover:not(:disabled) {
     height: 34px;
     flex-basis: 34px;
   }
-  .lobby-grid, .deck-builder { grid-template-columns: 1fr; }
+  .item-bar {
+    right: 12px;
+    bottom: 68px;
+    flex-direction: column;
+  }
+  .item-button {
+    width: 132px;
+    min-height: 58px;
+  }
+  .lobby-grid, .deck-builder, .lobby-loadout { grid-template-columns: 1fr; }
   .inline { flex-direction: column; }
   .card { width: 132px; min-height: 198px; }
   .hero { grid-template-columns: 58px 1fr; }

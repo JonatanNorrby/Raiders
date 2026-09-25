@@ -1,5 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
-import { CARD_MAP, CHARACTER, DECK_RULES, validateDeck } from "./game-data.js";
+import { CARD_MAP, CHARACTER, DECK_RULES, ITEM_MAP, ITEMS, validateDeck } from "./game-data.js";
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -25,6 +25,16 @@ function shuffle(cards) {
 function safeDeckName(value) {
   const name = String(value || "Deck").trim().slice(0, 32);
   return name || "Deck";
+}
+
+function randomItemId(excludedId = null) {
+  const pool = ITEMS.filter((item) => item.id !== excludedId);
+  const choices = pool.length > 0 ? pool : ITEMS;
+  if (choices.length === 0) return null;
+
+  const random = new Uint32Array(1);
+  crypto.getRandomValues(random);
+  return choices[random[0] % choices.length].id;
 }
 
 export class GameRoom extends DurableObject {
@@ -133,10 +143,14 @@ export class GameRoom extends DurableObject {
     try {
       if (message.type === "select_deck") {
         this.selectDeck(player, message.deck);
+      } else if (message.type === "select_item") {
+        this.selectItem(player, message.itemId);
       } else if (message.type === "ready") {
         this.setReady(player, Boolean(message.ready));
       } else if (message.type === "play_card") {
         this.playCard(player, message.cardIndex);
+      } else if (message.type === "use_item") {
+        this.useItem(player, message.itemIndex);
       } else if (message.type === "end_turn") {
         this.endTurn(player);
       } else {
@@ -162,6 +176,9 @@ export class GameRoom extends DurableObject {
       ready: false,
       deckName: null,
       selectedDeck: null,
+      selectedItemId: null,
+      items: [],
+      bonusItemGranted: false,
       deck: [],
       hand: [],
       health: CHARACTER.maxHealth,
@@ -194,6 +211,19 @@ export class GameRoom extends DurableObject {
     player.ready = false;
   }
 
+  selectItem(player, itemId) {
+    if (this.room.phase !== "lobby") {
+      throw new Error("Items can only be changed in the lobby.");
+    }
+
+    if (!ITEM_MAP.has(itemId)) {
+      throw new Error("Choose a valid starter item.");
+    }
+
+    player.selectedItemId = itemId;
+    player.ready = false;
+  }
+
   setReady(player, ready) {
     if (this.room.phase !== "lobby") {
       throw new Error("The game has already started.");
@@ -201,6 +231,10 @@ export class GameRoom extends DurableObject {
 
     if (ready && !player.selectedDeck) {
       throw new Error("Choose a deck first.");
+    }
+
+    if (ready && !player.selectedItemId) {
+      throw new Error("Choose a starter item first.");
     }
 
     player.ready = ready;
@@ -221,6 +255,8 @@ export class GameRoom extends DurableObject {
       player.mana = 0;
       player.maxMana = 0;
       player.hand = [];
+      player.items = [player.selectedItemId];
+      player.bonusItemGranted = false;
       player.deck = shuffle(player.selectedDeck);
 
       for (let i = 0; i < DECK_RULES.startingHand; i += 1) {
@@ -282,6 +318,57 @@ export class GameRoom extends DurableObject {
     }
   }
 
+  useItem(player, itemIndex) {
+    if (this.room.phase !== "playing") {
+      throw new Error("The game is not in progress.");
+    }
+
+    if (this.room.turnPlayerId !== player.id) {
+      throw new Error("Items can only be used on your turn.");
+    }
+
+    if (!Number.isInteger(itemIndex) || itemIndex < 0 || itemIndex >= player.items.length) {
+      throw new Error("Invalid item.");
+    }
+
+    const itemId = player.items[itemIndex];
+    const item = ITEM_MAP.get(itemId);
+    if (!item) {
+      throw new Error("Unknown item.");
+    }
+
+    player.items.splice(itemIndex, 1);
+
+    if (item.effect.type === "heal") {
+      player.health = Math.min(CHARACTER.maxHealth, player.health + item.effect.value);
+      return;
+    }
+
+    if (item.effect.type === "mana") {
+      player.mana += item.effect.value;
+      return;
+    }
+
+    if (item.effect.type === "armor") {
+      player.armor += item.effect.value;
+      return;
+    }
+
+    if (item.effect.type === "damage") {
+      const enemy = this.opponent(player.id);
+      if (!enemy) {
+        throw new Error("Opponent missing.");
+      }
+
+      this.dealDamage(enemy, item.effect.value);
+      if (enemy.health <= 0) {
+        this.room.phase = "finished";
+        this.room.winnerId = player.id;
+        this.room.turnPlayerId = null;
+      }
+    }
+  }
+
   endTurn(player) {
     if (this.room.phase !== "playing") {
       throw new Error("The game is not in progress.");
@@ -301,6 +388,14 @@ export class GameRoom extends DurableObject {
     nextPlayer.maxMana = Math.min(DECK_RULES.maxMana, nextPlayer.maxMana + 1);
     nextPlayer.mana = nextPlayer.maxMana;
     this.draw(nextPlayer);
+
+    if (!nextPlayer.bonusItemGranted && nextPlayer.health < CHARACTER.maxHealth / 2) {
+      const bonusItemId = randomItemId(nextPlayer.selectedItemId);
+      if (bonusItemId) {
+        nextPlayer.items.push(bonusItemId);
+        nextPlayer.bonusItemGranted = true;
+      }
+    }
   }
 
   dealDamage(player, amount) {
@@ -345,13 +440,16 @@ export class GameRoom extends DurableObject {
           id: player.id,
           name: player.name,
           ready: player.ready,
-          deckName: player.deckName
+          deckName: player.deckName,
+          itemSelected: Boolean(player.selectedItemId)
         })),
         you: you ? {
           id: you.id,
           name: you.name,
           ready: you.ready,
           deckName: you.deckName,
+          selectedItemId: you.selectedItemId,
+          items: [...you.items],
           health: you.health,
           armor: you.armor,
           mana: you.mana,
