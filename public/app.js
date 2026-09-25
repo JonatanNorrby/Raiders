@@ -398,7 +398,7 @@ function renderGame() {
         <div class="hero-row">${heroHtml(enemy, false)}</div>
         <div class="opponent-hand">${opponentHandHtml(enemy)}</div>
       </div>
-      <div class="turn-center">${center}</div>
+      <div class="turn-center card-drop-zone">${center}</div>
       <div>
         <div class="hand">${you.hand.map((cardId, index) => cardHtml(cardId, index, yourTurn, you.mana)).join("")}</div>
       </div>
@@ -432,9 +432,55 @@ function renderGame() {
   }
 
   document.querySelector("#end-turn").onclick = () => send({ type: "end_turn" });
+
+  const dropZone = document.querySelector(".card-drop-zone");
+  let draggedCard = null;
+
   document.querySelectorAll(".card[data-card-index]").forEach((button) => {
-    button.onclick = () => playCard(button);
+    button.addEventListener("dragstart", (event) => {
+      if (button.disabled) {
+        event.preventDefault();
+        return;
+      }
+
+      draggedCard = button;
+      button.classList.add("card-dragging");
+      dropZone.classList.add("card-drop-active");
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", button.dataset.cardIndex);
+    });
+
+    button.addEventListener("dragend", () => {
+      button.classList.remove("card-dragging");
+      dropZone.classList.remove("card-drop-active", "card-drop-hover");
+      draggedCard = null;
+    });
   });
+
+  dropZone.addEventListener("dragover", (event) => {
+    if (!draggedCard) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    dropZone.classList.add("card-drop-hover");
+  });
+
+  dropZone.addEventListener("dragleave", (event) => {
+    if (!dropZone.contains(event.relatedTarget)) {
+      dropZone.classList.remove("card-drop-hover");
+    }
+  });
+
+  dropZone.addEventListener("drop", (event) => {
+    if (!draggedCard) return;
+    event.preventDefault();
+
+    const card = draggedCard;
+    card.classList.remove("card-dragging");
+    dropZone.classList.remove("card-drop-active", "card-drop-hover");
+    draggedCard = null;
+    playCard(card);
+  });
+
   document.querySelectorAll(".item-button[data-item-index]").forEach((button) => {
     button.onclick = () => send({ type: "use_item", itemIndex: Number(button.dataset.itemIndex) });
   });
@@ -506,7 +552,7 @@ function cardHtml(cardId, index, yourTurn, mana) {
   if (!card) return "";
   const disabled = !yourTurn || card.cost > mana;
   return `
-    <button class="card" data-card-index="${index}" ${disabled ? "disabled" : ""}>
+    <button class="card" data-card-index="${index}" ${disabled ? "disabled" : 'draggable="true"'}>
       <div class="card-art" style="background-image:url('${card.art}')"></div>
       <div class="card-name">${escapeHtml(card.name)}</div>
       <div class="card-text">${escapeHtml(card.text)}</div>

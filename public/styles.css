@@ -290,7 +290,46 @@ button { cursor: pointer; }
 .hero-name { font-weight: 850; font-size: 18px; }
 .hero-stats { display: flex; gap: 8px; color: #c7ccd5; flex-wrap: wrap; }
 .stat { border: 1px solid #343a45; border-radius: 999px; padding: 5px 9px; background: #171b22; }
-.turn-center { display: grid; place-items: center; align-content: center; gap: 14px; min-height: 160px; }
+.turn-center {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 14px;
+  min-height: 160px;
+}
+
+.card-drop-zone {
+  position: relative;
+  border: 2px dashed transparent;
+  border-radius: 18px;
+  transition: border-color 140ms ease-out, background 140ms ease-out, box-shadow 140ms ease-out;
+}
+
+.card-drop-zone.card-drop-active {
+  border-color: rgba(190, 201, 216, .38);
+  background: rgba(255,255,255,.025);
+}
+
+.card-drop-zone.card-drop-hover {
+  border-color: rgba(226, 233, 243, .78);
+  background: rgba(255,255,255,.07);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+}
+
+.card-drop-zone.card-drop-active::after {
+  content: "Drop card to play";
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(12,15,20,.84);
+  color: #cbd2dc;
+  font-size: 12px;
+  letter-spacing: .04em;
+  pointer-events: none;
+}
 .hand, .opponent-hand {
   display: flex;
   justify-content: center;
@@ -320,7 +359,20 @@ button { cursor: pointer; }
   color: #fff;
   text-align: left;
   transform-origin: bottom center;
-  transition: transform 170ms ease-out, border-color 170ms ease-out, box-shadow 170ms ease-out, filter 170ms ease-out;
+  transition: transform 170ms ease-out, border-color 170ms ease-out, box-shadow 170ms ease-out, filter 170ms ease-out, opacity 120ms ease-out;
+}
+
+button.card[draggable="true"] {
+  cursor: grab;
+}
+
+button.card[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.card.card-dragging {
+  opacity: .38;
+  transform: translateY(-8px) scale(.98);
 }
 
 button.card:hover:not(:disabled) {
