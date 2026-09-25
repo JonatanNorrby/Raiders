@@ -513,36 +513,53 @@ button { cursor: pointer; }
   letter-spacing: .04em;
   pointer-events: none;
 }
-.hand, .opponent-hand {
+.hand,
+.opponent-hand {
   display: flex;
   justify-content: center;
   align-items: end;
-  gap: 10px;
-  flex-wrap: wrap;
   padding-top: 8px;
 }
+
+.hand {
+  min-height: 290px;
+  padding: 28px 54px 0;
+  overflow: visible;
+}
+
+.hand .card + .card {
+  margin-left: -34px;
+}
+
+.opponent-hand {
+  gap: 8px;
+  padding-top: 10px;
+}
+
 .card-back {
-  width: 76px;
+  width: 92px;
   aspect-ratio: 2 / 3;
-  border-radius: 8px;
+  border-radius: 9px;
   background: url("/assets/ui/card-back.png") center / cover no-repeat;
-  box-shadow: 0 8px 22px rgba(0,0,0,.28);
+  box-shadow: 0 10px 26px rgba(0,0,0,.34);
 }
 
 .card {
-  width: 154px;
-  min-height: 220px;
-  border: 1px solid #454d59;
+  width: 174px;
+  min-height: 248px;
+  border: 0;
   border-radius: 12px;
-  padding: 9px;
+  padding: 11px;
   display: grid;
-  grid-template-rows: 92px auto 1fr auto;
+  grid-template-rows: 104px auto 1fr auto;
   gap: 7px;
-  background: linear-gradient(rgba(20,23,29,.18), rgba(20,23,29,.18)), url("/assets/cards/base/card-base.png") center / cover no-repeat, #222730;
-  color: #fff;
+  background: url("/assets/cards/base/card-base.png") center / 100% 100% no-repeat;
+  color: #17120d;
   text-align: left;
-  transform-origin: bottom center;
-  transition: transform 170ms ease-out, border-color 170ms ease-out, box-shadow 170ms ease-out, filter 170ms ease-out, opacity 120ms ease-out;
+  transform-origin: 50% 115%;
+  transform: translateY(var(--fan-y, 0px)) rotate(var(--fan-angle, 0deg));
+  z-index: var(--fan-order, 0);
+  transition: transform 180ms ease-out, box-shadow 180ms ease-out, filter 180ms ease-out, opacity 120ms ease-out;
 }
 
 button.card[draggable="true"] {
@@ -553,18 +570,37 @@ button.card[draggable="true"]:active {
   cursor: grabbing;
 }
 
-.card.card-dragging {
-  opacity: .38;
-  transform: translateY(-8px) scale(.98);
+.card.card-unplayable {
+  cursor: default;
 }
 
-button.card:hover:not(:disabled) {
+.card.card-dragging {
+  opacity: .38;
+  transform: translateY(-10px) rotate(0deg) scale(.98);
+}
+
+button.card:hover {
   position: relative;
-  z-index: 10;
-  transform: translateY(-16px) scale(1.06);
-  border-color: #8f9caf;
-  box-shadow: 0 18px 34px rgba(0,0,0,.42);
-  filter: brightness(1.08);
+  z-index: 50;
+  transform: translateY(-28px) rotate(0deg) scale(1.08);
+  box-shadow: 0 22px 38px rgba(0,0,0,.46);
+  filter: brightness(1.05);
+}
+
+.card-too-expensive .card-cost {
+  color: #a31818 !important;
+  animation: mana-cost-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes mana-cost-pulse {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 0 rgba(163,24,24,0);
+  }
+  50% {
+    opacity: .58;
+    text-shadow: 0 0 9px rgba(163,24,24,.72);
+  }
 }
 
 .card-play-ghost {
@@ -582,7 +618,7 @@ button.card:hover:not(:disabled) {
   opacity: 0;
 }
 
-.card-art { border-radius: 8px; border: 1px solid rgba(255,255,255,.12); background: #171b21 center / cover no-repeat; }
+.card-art { border-radius: 8px; border: 0; background-position: center; background-size: cover; background-repeat: no-repeat; }
 .card-name { font-weight: 850; }
 .card-text { font-size: 13px; line-height: 1.35; color: #c3c9d2; }
 .card-cost { font-weight: 900; }
@@ -631,7 +667,16 @@ button.card:hover:not(:disabled) {
   }
   .lobby-grid, .deck-builder, .lobby-loadout { grid-template-columns: 1fr; }
   .inline { flex-direction: column; }
-  .card { width: 132px; min-height: 198px; }
+  .hand {
+    min-height: 230px;
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+  .hand .card + .card {
+    margin-left: -42px;
+  }
+  .card { width: 148px; min-height: 216px; grid-template-rows: 88px auto 1fr auto; }
+  .card-back { width: 82px; }
   .hero { grid-template-columns: 58px 1fr; }
   .hero-portrait { width: 54px; }
 }

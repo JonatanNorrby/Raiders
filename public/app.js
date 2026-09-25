@@ -424,7 +424,7 @@ function renderGame() {
       <div class="turn-center card-drop-zone">${center}</div>
       <div>
         ${minionZoneHtml(you.minions || [], "You")}
-        <div class="hand">${you.hand.map((cardId, index) => cardHtml(cardId, index, yourTurn, you.mana)).join("")}</div>
+        <div class="hand">${you.hand.map((cardId, index) => cardHtml(cardId, index, yourTurn, you.mana, you.hand.length)).join("")}</div>
       </div>
       <div class="player-hud" aria-label="Your health and mana">
         <div class="hud-stat hud-health">
@@ -462,7 +462,7 @@ function renderGame() {
 
   document.querySelectorAll(".card[data-card-index]").forEach((button) => {
     button.addEventListener("dragstart", (event) => {
-      if (button.disabled) {
+      if (button.dataset.playable !== "true") {
         event.preventDefault();
         return;
       }
@@ -601,12 +601,26 @@ function opponentHandHtml(player) {
   ).join("");
 }
 
-function cardHtml(cardId, index, yourTurn, mana) {
+function cardHtml(cardId, index, yourTurn, mana, handCount) {
   const card = catalog.cards.find((item) => item.id === cardId);
   if (!card) return "";
-  const disabled = !yourTurn || card.cost > mana;
+
+  const affordable = card.cost <= mana;
+  const playable = yourTurn && affordable;
+  const middle = (handCount - 1) / 2;
+  const distance = index - middle;
+  const fanAngle = distance * 4;
+  const fanY = Math.abs(distance) * 6;
+
   return `
-    <button class="card" data-card-index="${index}" ${disabled ? "disabled" : 'draggable="true"'}>
+    <button
+      class="card ${affordable ? "" : "card-too-expensive"} ${playable ? "" : "card-unplayable"}"
+      data-card-index="${index}"
+      data-playable="${playable}"
+      style="--fan-angle:${fanAngle}deg;--fan-y:${fanY}px;--fan-order:${index}"
+      ${playable ? 'draggable="true"' : ""}
+      aria-disabled="${playable ? "false" : "true"}"
+    >
       <div class="card-art" style="background-image:url('${card.art}')"></div>
       <div class="card-name">${escapeHtml(card.name)}</div>
       <div class="card-text">${escapeHtml(card.text)}</div>
